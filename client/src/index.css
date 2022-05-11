@@ -361,6 +361,10 @@ textarea:focus {
 .light-theme {
   background-color: #fff !important;
 }
+
+.light-theme .profile-content {
+  color: black !important;
+}
 .light-theme #root {
   color: #0b0b0b !important;
 }

@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import dateFormat from 'dateformat';
 import convertRupiah from 'rupiah-format';
 import { useQuery } from 'react-query';
 
 import Navbar from '../components/Navbar';
-
+import { useNavigate } from 'react-router-dom';
 import imgDumbMerch from '../assets/DumbMerch.png';
 
 import { UserContext } from '../context/userContext';
@@ -17,6 +17,7 @@ import { API } from '../config/api';
 export default function Profile() {
   const title = 'Profile';
   document.title = 'DumbMerch | ' + title;
+  const navigate = useNavigate();
 
   const [state] = useContext(UserContext);
 
@@ -32,6 +33,10 @@ export default function Profile() {
     return response.data.data;
   });
 
+  const handleEditProfile = (id) => {
+    navigate(`/update-profile/${id}`);
+  };
+  console.log(state.user);
   return (
     <>
       <Navbar title={title} />
@@ -58,6 +63,10 @@ export default function Profile() {
 
                 <div className="profile-header">Address</div>
                 <div className="profile-content">{profile?.address ? profile?.address : '-'}</div>
+
+                <Button onClick={() => handleEditProfile(state.user.id)} className="fw-normal px-4 mb-4" variant="danger">
+                  Edit Profile
+                </Button>
               </Col>
             </Row>
           </Col>
@@ -125,7 +134,8 @@ export default function Profile() {
                           </div>
                         </Col>
                         <Col xs="3">
-                          <img src={imgDumbMerch} alt="img" className="img-fluid" style={{ maxHeight: '120px' }} />
+                          <div className={`status-transaction-${item.status} h-100 rounded d-flex justify-content-center align-items-center fw-bold`}>{item.status}</div>
+                          {/* <img src={imgDumbMerch} alt="img" className="img-fluid" style={{ maxHeight: '120px' }} /> */}
                         </Col>
                       </Row>
                     </Container>

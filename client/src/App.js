@@ -15,6 +15,8 @@ import UpdateCategoryAdmin from './pages/UpdateCategoryAdmin';
 import AddCategoryAdmin from './pages/AddCategoryAdmin';
 import AddProductAdmin from './pages/AddProductAdmin';
 import UpdateProductAdmin from './pages/UpdateProductAdmin';
+import Faq from './pages/Faq';
+import UpdateProfil from './pages/UpdateProfile'
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -69,8 +71,9 @@ function App() {
 
   return (
     <Routes>
-      <Route exact path="/" element={<Product />} />
+      <Route path="/" element={<Product />} />
       <Route path="/auth" element={<Auth />} />
+      <Route path="/update-profile/:id" element={<UpdateProfil/>} />
       <Route path="/product/:id" element={<DetailProduct />} />
       <Route path="/complain" element={<Complain />} />
       <Route path="/profile" element={<Profile />} />
@@ -81,6 +84,7 @@ function App() {
       <Route path="/product-admin" element={<ProductAdmin />} />
       <Route path="/add-product" element={<AddProductAdmin />} />
       <Route path="/update-product/:id" element={<UpdateProductAdmin />} />
+      <Route path="/faq" element={<Faq />} />
     </Routes>
   );
 }

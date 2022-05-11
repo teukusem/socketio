@@ -5,9 +5,9 @@ const router = express.Router();
 // Controller
 const { addUsers, getUsers, getUser, updateUser, deleteUser } = require('../controllers/user');
 const { getProducts, getProduct, addProduct, updateProduct, deleteProduct } = require('../controllers/product');
-const { getTransactions, addTransaction } = require('../controllers/transaction');
+const { getTransactions, addTransaction, notification } = require('../controllers/transaction');
 const { getCategories, addCategory, updateCategory, getCategory, deleteCategory } = require('../controllers/category');
-const { getProfile } = require('../controllers/profile');
+const { getProfile, updateProfile } = require('../controllers/profile');
 const { register, login, checkAuth } = require('../controllers/auth');
 
 // Middleware
@@ -18,10 +18,11 @@ const { uploadFile } = require('../middlewares/uploadFile');
 router.post('/user', addUsers);
 router.get('/users', getUsers);
 router.get('/user/:id', getUser);
-router.patch('/user/:id', updateUser);
+router.delete('/user/:id', updateUser);
 router.delete('/user/:id', deleteUser);
 
 router.get('/profile', auth, getProfile);
+router.patch('/profile', auth, uploadFile('image'), updateProfile);
 
 router.get('/products', auth, getProducts);
 router.get('/product/:id', auth, getProduct);
@@ -31,6 +32,9 @@ router.delete('/product/:id', auth, deleteProduct);
 
 router.get('/transactions', auth, getTransactions);
 router.post('/transaction', auth, addTransaction);
+
+// Create router for notification with POST method here ...
+router.post('/notification', notification);
 
 router.get('/categories', getCategories);
 router.get('/category/:id', getCategory);

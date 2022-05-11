@@ -48,6 +48,10 @@ export default function ComplainAdmin() {
     loadContacts();
     loadMessages();
 
+    socket.on('connect_error', (err) => {
+      console.error(err.message); // not authorized
+    });
+
     return () => {
       socket.disconnect();
     };
@@ -57,13 +61,13 @@ export default function ComplainAdmin() {
     socket.emit('load customer contacts');
     socket.on('customer contacts', (data) => {
       // filter just customers which have sent a message
-      let dataContacts = data.filter((item) => item.status !== 'admin' && (item.recipientMessage.length > 0 || item.senderMessage.length > 0));
+      let dataContacts = data.filter((item) => item.status !== 'admin' && (item.recipientMessage.length >= 0 || item.senderMessage.length >= 0));
 
       // manipulate customers to add message property with the newest message
       // code here
       dataContacts = dataContacts.map((item) => ({
         ...item,
-        // message: item.senderMessage.length > 0 ? item.senderMessagge[item.senderMessage.length -1].message : "Click here to start message"
+        // message: item.senderMessage.length > 0 ? item.senderMessagge[item.senderMessage.length -1].message : "Click here to start message",
       }));
       setContacts(dataContacts);
     });
@@ -78,18 +82,24 @@ export default function ComplainAdmin() {
 
   // code here
   const loadMessages = (value) => {
-    socket.on('messages', (data) => {
-      if (data.length > 0) {
-        const dataMessages = data.map((item) => ({
-          idSender: item.sender.id,
-          message: item.message,
-        }));
-        console.log(dataMessages);
-        setMessages(dataMessages);
-      }
-      loadContacts();
-      const chatMessages = document.getElementById('chat-messages');
-      chatMessages.scrollTop = chatMessages?.scrollHeight;
+    socket.on('customers contact', (data) => {
+      socket.on('messages', (data) => {
+        if (data.length > 0) {
+          const dataMessages = data.map((item) => ({
+            idSender: item.sender.id,
+            message: item.message,
+          }));
+          console.log(dataMessages);
+          setMessages(dataMessages);
+        } else {
+          const dataMessages = null;
+          console.log('Data Messages', dataMessages);
+          setMessages(dataMessages);
+        }
+        loadContacts();
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.scrollTop = chatMessages?.scrollHeight;
+      });
     });
   };
 

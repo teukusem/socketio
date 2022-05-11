@@ -37,13 +37,56 @@ export default function DetailProduct() {
 
       const body = JSON.stringify(data);
 
-      await API.post('/transaction', body, config);
+      const response = await API.post('/transaction', body, config);
+
+      const token = response.data.payment.token;
+
+      window.snap.pay(token, {
+        onSuccess: function (result) {
+          /* You may add your own implementation here */
+          console.log(result);
+          navigate('/profile');
+        },
+        onPending: function (result) {
+          /* You may add your own implementation here */
+          console.log(result);
+          navigate('/profile');
+        },
+        onError: function (result) {
+          /* You may add your own implementation here */
+          console.log(result);
+        },
+        onClose: function () {
+          /* You may add your own implementation here */
+          alert('you closed the popup without finishing the payment');
+        },
+      });
 
       navigate('/profile');
     } catch (error) {
       console.log(error);
     }
   });
+
+  useEffect(() => {
+    //change this to the script source you want to load, for example this is snap.js sandbox env
+    const midtransScriptUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    //change this according to your client-key
+    const myMidtransClientKey = 'Client key here ...';
+
+    let scriptTag = document.createElement('script');
+    scriptTag.src = midtransScriptUrl;
+    // optional if you want to set script attribute
+    // for example snap.js have data-client-key attribute
+    scriptTag.setAttribute('data-client-key', myMidtransClientKey);
+
+    document.body.appendChild(scriptTag);
+    return () => {
+      document.body.removeChild(scriptTag);
+    };
+  }, []);
+
+  // Insert transaction data
 
   return (
     <div>

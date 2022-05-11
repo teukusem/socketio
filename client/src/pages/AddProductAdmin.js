@@ -6,7 +6,6 @@ import { API } from '../config/api';
 import NavbarAdmin from '../components/NavbarAdmin';
 
 export default function AddProductAdmin() {
-  console.clear();
   const title = 'Product admin';
   document.title = 'DumbMerch | ' + title;
 

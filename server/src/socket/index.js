@@ -17,7 +17,7 @@ const socketIo = (io) => {
     }
   });
 
-  io.on('connection', async (socket) => {
+  io.on('connection',  (socket) => {
     console.log('client connect: ', socket.id);
 
     // code here
